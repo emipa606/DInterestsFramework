@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
   <name>[D] Interests Framework (Continued)</name>
   <packageId>Mlie.DInterestsFramework</packageId>
@@ -20,23 +20,92 @@
   <loadAfter>
     <li>brrainz.harmony</li>
   </loadAfter>
-  <description>[img]https://i.imgur.com/WAEzk68.png[/img]
+  <description>[img]https://i.imgur.com/buuPQel.png[/img]
 Update of Dametris mod
 https://steamcommunity.com/sharedfiles/filedetails/?id=2089927321
 
 - The RimHUD integration does not work on 1.3 as I do not have the skill to update the patch.
 
-[img]https://i.imgur.com/7Gzt3Rg.png[/img]
+[img]https://i.imgur.com/pufA0kM.png[/img]
 
 [table]
     [tr]
         [td][url=https://invite.gg/Mlie][img]https://i.imgur.com/zdzzBrc.png[/img][/url][/td]
         [td][url=https://github.com/emipa606/DInterestsFramework][img]https://i.imgur.com/kTkpTOE.png[/img][/url][/td]
     [/tr]
+    [tr]
+        [td][img]https://i.imgur.com/WjDSfUn.png[/img][/td]
+        [td][img]https://i.imgur.com/Be8E2qJ.png[/img][/td]
+    [/tr]
 [/table]
 	
-[img]https://i.imgur.com/NOW7jU1.png[/img]
+[img]https://i.imgur.com/Z4GOv8H.png[/img]
 
+Adds tools to create skill-linked "interests" in place of and in addition to the basic major and minor passion.
+
+This mod does not significantly change the game on its own. Instead, it enables modders to create their own interests more easily than would otherwise be possible, as passions are hard-coded into the game.
+
+Check out my Interests mod, which utilizes this framework to add 11 new interests to the game: https://steamcommunity.com/sharedfiles/filedetails/?id=2089938084
+
+Requires Harmony.
+
+
+------------------------------------------------------------------------------------------------------
+
+How it works:
+Passions are set and read according to an enum. Enums are compiled directly to ints, which means they can't be overridden with Harmony or any other means. However, this also means any int can be cast to a Passion unchecked, and stored in a field meant for a Passion.
+
+The result is compatibility with most mods.
+
+The other major obstacle is the fact that passion evaluation is hardcoded based on the enum. So, we use Harmony patches, including some transpilers, to call our own code on these evaluations. However, this has to be done for *any* evaluation of passions, which means mods that use their own code to evaluate passions won't natively take our new interests into account. So, the framework patches some of those too.
+Let me know if you think of mods that could use increased integration with interests.
+
+
+------------------------------------------------------------------------------------------------------
+
+Load order:
+
+Harmony
+Core
+Royalty
+...
+Interests Framework
+
+------------------------------------------------------------------------------------------------------
+
+Compatible with:
+- EdB Prepare Carefully (patch included)
+- RimHUD (patch included)
+- Character Editor (patch included)
+- Children, school and learning
+- Work Tab
+- Mad Skills (though this may change functionality of some learn rates, obviously)
+
+Conflicts:
+- Static Quality Plus. This mod overrides nearly everything about pawn skills, and it'd be a significant project with constant maintenance to ensure compatibility, so I don't.
+- Generally, mods that display skill/passion information in an exclusionary way. I don't know any in particular other than the ones I've explicitly patched, but they're bound to be out there. Let me know if you find one.
+- Custom races may or may not take advantage of expanded passions automatically.
+
+------------------------------------------------------------------------------------------------------
+
+Details:
+- Source code is included, so feel free to look and modify anything you want.
+
+- DInterest.InterestDef: new type of def for interests. Define one in XML using the preset fields, or subclass it and use the hooks from InterestBase.
+- Defined interests are automatically added to the pool with the given properties. These include the ability to modify:
+- Learn rate
+- Forget rate
+- Texture
+- Chance to appear (through a weight system)
+- Chance for the associated skill to be chosen for inspiration
+- Chance for inspiration to occur
+- Skills ineligible for the interest
+
+- Additionally, you can subclass InterestDef and override any of the methods. This allows you to define behavior to occur on every tick for every pawn with the given interest, or create interests that affect all the pawns on the map when they use the given skill (among other things).
+
+------------------------------------------------------------------------------------------------------
+
+Please let me know if you run into any issues, compatibility or otherwise.
 
 
 [img]https://i.imgur.com/PwoNOj4.png[/img]
